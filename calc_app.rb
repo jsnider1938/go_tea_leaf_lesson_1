@@ -4,6 +4,8 @@
 #
 #
 
+# require "pry"
+
 def say(msg)
   puts "#{msg}"
 end
@@ -16,6 +18,8 @@ operator = gets.chomp
 
 say "What's the second number?"
 num_2 = gets.chomp
+
+# binding.pry
 
 answer = case
 when operator == "ADD"
