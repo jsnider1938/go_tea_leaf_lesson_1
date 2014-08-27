@@ -1,50 +1,73 @@
-# rock_paper_scissors.rb
+# Rock Paper Scissors game
+#
+#
+#
 
-# rock paper scissors game with text user input
-
+# this method is for consolidating the puts logic
 def say(words)
   puts "==> #{words}"
 end
 
+# this method is called every time a new game is played. it instantiates all the
+# necessary variables
 def new_game()
-  comp_move = ['r', 'p', 's'].sample
+  comp_move = ['rock', 'paper', 'scissors'].sample
   player_move = ""
   rock_paper_scissors(player_move, comp_move)
 end
 
-def player_choose(player_move)
-  say "Choose R/P/S"
+# this method is called to prompt the player for a choice and make sure it is one of the choices
+def prompt_player(player_move)
+  say "Choose rock, paper, or scissors"
   input = gets.chomp
-  player_move.replace(input)
-  if player_move == "R" || player_move == "P" || player_move == "S"
+  player_move.replace(input.downcase)
+  if player_move == "rock" || player_move == "paper" || player_move == "scissors"
     return player_move
   else
-    player_choose(player_move)
+    prompt_player("")
   end
 end
 
-def rock_paper_scissors(player_move, comp_move)
-  say "play rock paper scissors"
-  player_choose(player_move)
-  if player_move == 'R' && comp_move == 'r'
-    say "You and computer both chose rock. Tie game"
-  elsif player_move == 'R' and comp_move == 'p'
-    say "You chose rock and computer chose paper. You lose"
-  elsif player_move == 'R' && comp_move == 's'
-    say "You chose rock and computer chose scissors. You win!"
-  elsif player_move == 'P' && comp_move == 'r'
-    say "You chose paper and computer chose rock. You win!"
-  elsif player_move == 'P' && comp_move == 'p'
-    say "You and computer both chose paper. Tie game"
-  elsif player_move == 'P' && comp_move == 's'
-    say "You chose paper and computer chose scissors. You lose..."
-  elsif player_move == 'S' && comp_move == 'r'
-    say "You chose scissors and computer chose rock. You lose..."
-  elsif player_move == 'S' && comp_move == 'p'
-    say "You chose scissors and computer chose paper. You win!"
-  elsif player_move == 'S' && comp_move == 's'
-    say "You and compute both chose scissors. Tie game"  
+# this method is called to assist in evaluating who wins
+def choice_to_num(choice)
+  if choice == 'paper'
+    choice = 1
+  elsif choice == 'rock'
+    choice = 2
+  elsif choice == 'scissors'
+    choice = 3
   end
+end
+
+# this method is called to evaluate who wins
+def evaluate(player, comp)
+  value = (player % 3) - (comp % 3)
+  if value == -1 || value == 2
+    return 'win'
+  elsif value == 1 || value == -2
+    return 'lose'
+  else
+    return 'tie'
+  end
+end
+
+# this method is called to print out the result to the user
+def output(outcome, player, comp)
+  if outcome == 'win'
+    say "You choose #{player}, computer chose #{comp}. You win!"
+  elsif outcome == 'lose'
+    say "You chose #{player}, computer chose #{comp}. You lose..."
+  else
+    say "You both chose #{player}. Tie game."
+  end
+end
+
+# this method combines all of the other methods. It is the program's backbone
+def rock_paper_scissors(player_move, comp_move)  
+  say "Let's play some Rock Paper Scissors!"
+  say "-------------------------------------"
+  prompt_player(player_move)
+  output(evaluate(choice_to_num(player_move), choice_to_num(comp_move)), player_move, comp_move)
   say "Would you like to play again? Type yes or no"
   play_again = gets.chomp
   if play_again.downcase == "yes"
@@ -54,41 +77,5 @@ def rock_paper_scissors(player_move, comp_move)
   end
 end
 
-
-
-# def evaluate(player, comp)
-#   if [['r', 's'], ['p', 'r'], ['s', 'p']].include?([player.downcase[0], comp])
-#     return 'win'
-#   elsif [['s', 'r'], ['r', 'p'], ['p', 's']].include?([player.downcase[0], comp])
-#     return 'lose'
-#   else
-#     return 'tie'
-#   end
-# end
-
-# def output(outcome)
-#   if outcome == 'win'
-#     puts "You win!"
-#   elsif outcome == 'lose'
-#     puts "You lose..."
-#   else
-#     puts "Tie game"
-#   end
-# end
-
-# def rock_paper_scissors(comp_move)
-#   say "Let's play some Rock Paper Scissors!"
-#   say "-------------------------------------"
-#   say "Choose rock, paper, or scissors"
-#   player_move = gets.chomp
-#   output(evaluate(player_move, comp_move))
-#   say "Would you like to play again? Type yes or no"
-#   play_again = gets.chomp
-#   if play_again.downcase == "yes"
-#     new_game
-#   else
-#     return
-#   end
-# end
-
+# and of course, we need to start the game
 new_game
