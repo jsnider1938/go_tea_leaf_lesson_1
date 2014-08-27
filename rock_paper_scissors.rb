@@ -53,6 +53,7 @@ end
 
 # this method is called to print out the result to the user
 def output(outcome, player, comp)
+  puts ""
   if outcome == 'win'
     say "You choose #{player}, computer chose #{comp}. You win!"
   elsif outcome == 'lose'
@@ -63,11 +64,12 @@ def output(outcome, player, comp)
 end
 
 # this method combines all of the other methods. It is the program's backbone
-def rock_paper_scissors(player_move, comp_move)  
+def rock_paper_scissors(player_move, comp_move)
+  puts "-------------------------------------"
   say "Let's play some Rock Paper Scissors!"
-  say "-------------------------------------"
   prompt_player(player_move)
   output(evaluate(choice_to_num(player_move), choice_to_num(comp_move)), player_move, comp_move)
+  puts ""
   say "Would you like to play again? Type yes or no"
   play_again = gets.chomp
   if play_again.downcase == "yes"
