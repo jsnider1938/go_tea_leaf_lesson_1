@@ -1,7 +1,4 @@
 # Rock Paper Scissors game
-#
-#
-#
 
 # this method is for consolidating the puts logic
 def say(words)
@@ -65,7 +62,7 @@ end
 
 # this method combines all of the other methods. It is the program's backbone
 def rock_paper_scissors(player_move, comp_move)
-  puts "-------------------------------------"
+  puts "-------------------------------------"   # I don't want the hash rocket here so I use puts instead of say()
   say "Let's play some Rock Paper Scissors!"
   prompt_player(player_move)
   output(evaluate(choice_to_num(player_move), choice_to_num(comp_move)), player_move, comp_move)
