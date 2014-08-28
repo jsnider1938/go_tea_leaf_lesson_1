@@ -16,13 +16,13 @@ def draw_board(a)
 end
 
 def check_if_game_over(soon_to_be_wins)
-  if soon_to_be_wins.has_key?(['X', 'X', 'X'])
+  if soon_to_be_wins.has_value?(['X', 'X', 'X'])
     puts "You win!"
     return true
-  elsif soon_to_be_wins.has_key?(['O', 'O', 'O'])
+  elsif soon_to_be_wins.has_value?(['O', 'O', 'O'])
     puts "Computer wins"
     return true
-  elsif soon_to_be_wins.keys.flatten.include?('nil')
+  elsif !soon_to_be_wins.values.flatten.include?('nil')
     puts "Cats game. It's a tie."
     return true
   else
@@ -48,11 +48,13 @@ loop do
         v[k.index(player_move)] = 'X'
       end
     end
+    draw_board(vars)
+    break if check_if_game_over(soon_to_be_wins)
     # computer chooses and adds to board
-    case soon_to_be_wins
-    when soon_to_be_wins.has_key?(['X', 'nil', 'X']) || soon_to_be_wins.has_key?(['X', 'X', 'nil']) || soon_to_be_wins.has_key?(['nil', 'X', 'X'])  # for two X's
+    case
+    when soon_to_be_wins.has_value?(['O', 'nil', 'O']) || soon_to_be_wins.has_value?(['O', 'O', 'nil']) || soon_to_be_wins.has_value?(['nil', 'O', 'O'])   # for two O's
       soon_to_be_wins.each do |k, v|
-        if (v.count('X') == 2) && (v.count('O') != 1)   #if x about to win
+        if (v.count('O') == 2) && (v.count('X') == 0)   #if o about to win
           space = k[v.index('nil')]
           vars[space - 1] = 'O' # changes the space to 'O' in vars master record
           soon_to_be_wins.each do |key, value| #changing all spaces in possible solutions list
@@ -60,11 +62,12 @@ loop do
               value[key.index(space)] = 'O'
             end
           end
+          break
         end
       end
-    when soon_to_be_wins.has_key?(['O', 'nil', 'O']) || soon_to_be_wins.has_key?(['O', 'O', 'nil']) || soon_to_be_wins.has_key?(['nil', 'O', 'O'])   # for two O's
+    when soon_to_be_wins.has_value?(['X', 'nil', 'X']) || soon_to_be_wins.has_value?(['X', 'X', 'nil']) || soon_to_be_wins.has_value?(['nil', 'X', 'X'])  # for two X's
       soon_to_be_wins.each do |k, v|
-        if (v.count('O') == 2) && (v.count('X') != 0)   #if x about to win
+        if (v.count('X') == 2) && (v.count('O') == 0)   #if x about to win
           space = k[v.index('nil')]
           vars[space - 1] = 'O' # changes the space to 'O' in vars master record
           soon_to_be_wins.each do |key, value| #changing all spaces in possible solutions list
@@ -72,9 +75,10 @@ loop do
               value[key.index(space)] = 'O'
             end
           end
+          break
         end
       end
-    when soon_to_be_wins.has_key?(['O', 'nil', 'nil']) || soon_to_be_wins.has_key?(['nil', 'O', 'nil']) || soon_to_be_wins.has_key?(['nil', 'nil', 'O'])   # for one 0 no x
+    when soon_to_be_wins.has_value?(['O', 'nil', 'nil']) || soon_to_be_wins.has_value?(['nil', 'O', 'nil']) || soon_to_be_wins.has_value?(['nil', 'nil', 'O'])   # for one 0 no x
       soon_to_be_wins.each do |k, v|
         if (v.count('O') == 1) && (v.count('X') == 0)   #if x about to win
           space = k[v.index('nil')]
@@ -84,9 +88,10 @@ loop do
               value[key.index(space)] = 'O'
             end
           end
+          break
         end
       end 
-    when soon_to_be_wins.has_key?(['nil', 'nil', 'nil'])   # for rows with no elements
+    when soon_to_be_wins.has_value?(['nil', 'nil', 'nil'])   # for rows with no elements
       soon_to_be_wins.each do |k, v|
         if (v.count('O') == 0) && (v.count('X') == 0)   #if x about to win
           space = k[v.index('nil')]
@@ -96,6 +101,7 @@ loop do
               value[key.index(space)] = 'O'
             end
           end
+          break
         end
       end
     else
@@ -111,6 +117,7 @@ loop do
         else
           next
         end
+        break
       end
     end
     draw_board(vars)
