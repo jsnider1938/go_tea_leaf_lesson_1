@@ -22,6 +22,9 @@ def check_if_game_over(soon_to_be_wins)
   elsif soon_to_be_wins.has_key?(['O', 'O', 'O'])
     puts "Computer wins"
     return true
+  elsif soon_to_be_wins.keys.flatten.include?('nil')
+    puts "Cats game. It's a tie."
+    return true
   else
     return false
   end
@@ -46,58 +49,69 @@ loop do
       end
     end
     # computer chooses and adds to board
-    pass = false
-    soon_to_be_wins.each do |k, v|              # checking for X about to win
-      if (v.count('X') == 2) && (v.count('O') != 1)  
-        space = k[v.index('nil')]
-        vars[space - 1] = 'O' # changes the space to 'O' in vars master record
-        soon_to_be_wins.each do |key, value| #changing all spaces in possible solutions list
-          if key.include?(space)
-            value[key.index(space)] = 'O'
+    case soon_to_be_wins
+    when soon_to_be_wins.has_key?(['X', 'nil', 'X']) || soon_to_be_wins.has_key?(['X', 'X', 'nil']) || soon_to_be_wins.has_key?(['nil', 'X', 'X'])  # for two X's
+      soon_to_be_wins.each do |k, v|
+        if (v.count('X') == 2) && (v.count('O') != 1)   #if x about to win
+          space = k[v.index('nil')]
+          vars[space - 1] = 'O' # changes the space to 'O' in vars master record
+          soon_to_be_wins.each do |key, value| #changing all spaces in possible solutions list
+            if key.include?(space)
+              value[key.index(space)] = 'O'
+            end
           end
         end
-        pass = true
-        break
       end
-      break if pass
-    end
-    soon_to_be_wins.each do |k, v|              # checking for only one O
-      if (v.count('O') == 1) && (v.count('X') != 1) 
-        space = k[v.index('nil')]
-        vars[space - 1] = 'O' # changes the space to 'O' in vars master record
-        soon_to_be_wins.each do |key, value|
-          if key.include?(space)
-            value[key.index(space)] = 'O'
+    when soon_to_be_wins.has_key?(['O', 'nil', 'O']) || soon_to_be_wins.has_key?(['O', 'O', 'nil']) || soon_to_be_wins.has_key?(['nil', 'O', 'O'])   # for two O's
+      soon_to_be_wins.each do |k, v|
+        if (v.count('O') == 2) && (v.count('X') != 0)   #if x about to win
+          space = k[v.index('nil')]
+          vars[space - 1] = 'O' # changes the space to 'O' in vars master record
+          soon_to_be_wins.each do |key, value| #changing all spaces in possible solutions list
+            if key.include?(space)
+              value[key.index(space)] = 'O'
+            end
           end
         end
-        pass = true
-        break
       end
-      break if pass
-    end
-    soon_to_be_wins.each do |k, v|              # checking for two O's
-      if (v.count('O') == 2) && (v.count('X') != 0) 
-        space = k[v.index('nil')]
-        vars[space - 1] = 'O' # changes the space to 'O' in vars master record
-        soon_to_be_wins.each do |key, value|
-          if key.include?(space)
-            value[key.index(space)] = 'O'
+    when soon_to_be_wins.has_key?(['O', 'nil', 'nil']) || soon_to_be_wins.has_key?(['nil', 'O', 'nil']) || soon_to_be_wins.has_key?(['nil', 'nil', 'O'])   # for one 0 no x
+      soon_to_be_wins.each do |k, v|
+        if (v.count('O') == 1) && (v.count('X') == 0)   #if x about to win
+          space = k[v.index('nil')]
+          vars[space - 1] = 'O' # changes the space to 'O' in vars master record
+          soon_to_be_wins.each do |key, value| #changing all spaces in possible solutions list
+            if key.include?(space)
+              value[key.index(space)] = 'O'
+            end
           end
         end
-        pass = true
-        break
+      end 
+    when soon_to_be_wins.has_key?(['nil', 'nil', 'nil'])   # for rows with no elements
+      soon_to_be_wins.each do |k, v|
+        if (v.count('O') == 0) && (v.count('X') == 0)   #if x about to win
+          space = k[v.index('nil')]
+          vars[space - 1] = 'O' # changes the space to 'O' in vars master record
+          soon_to_be_wins.each do |key, value| #changing all spaces in possible solutions list
+            if key.include?(space)
+              value[key.index(space)] = 'O'
+            end
+          end
+        end
       end
-      break if pass
-    end
-    soon_to_be_wins.each do |k, v|              # attempt a new 3-in-a-row 
-        space = k[v.index('nil')]
-        vars[space - 1] = 'O' # changes the space to 'O' in vars master record
-        soon_to_be_wins.each do |key, value|
-          if key.include?(space)
-            value[key.index(space)] = 'O'
+    else
+      soon_to_be_wins.each do |k, v|
+        if v.include?('nil')
+          space = k[v.index('nil')]
+          vars[space - 1] = 'O' # changes the space to 'O' in vars master record
+          soon_to_be_wins.each do |key, value| #changing all spaces in possible solutions list
+            if key.include?(space)
+              value[key.index(space)] = 'O'
+            end
           end
+        else
+          next
         end
-        break
+      end
     end
     draw_board(vars)
     break if check_if_game_over(soon_to_be_wins)
