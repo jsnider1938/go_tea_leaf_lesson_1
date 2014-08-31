@@ -32,8 +32,8 @@ end
 loop do
   vars = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
   draw_board(vars)
-  soon_to_be_wins = {[1, 2, 3] => ['nil', 'nil', 'nil'], [4, 5, 6] => ['nil', 'nil', 'nil'], [7, 8, 9] => ['nil', 'nil', 'nil'], [1, 5, 9] => ['nil', 'nil', 'nil'], [3, 5, 7] => ['nil', 'nil', 'nil'],
-   [1, 4, 7] => ['nil', 'nil', 'nil'],[2, 5, 8] => ['nil', 'nil', 'nil'], [3, 6, 9] => ['nil', 'nil', 'nil']}
+  soon_to_be_wins = {[1, 2, 3] => ['nil', 'nil', 'nil'], [4, 5, 6] => ['nil', 'nil', 'nil'], [7, 8, 9] => ['nil', 'nil', 'nil'], [5, 9, 1] => ['nil', 'nil', 'nil'], [3, 5, 7] => ['nil', 'nil', 'nil'],
+   [4, 1, 7] => ['nil', 'nil', 'nil'],[2, 5, 8] => ['nil', 'nil', 'nil'], [9, 6, 3] => ['nil', 'nil', 'nil']}
   #player chooses and adds to board
   loop do
     draw_board(vars)
