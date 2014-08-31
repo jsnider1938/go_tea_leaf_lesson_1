@@ -1,4 +1,3 @@
-require "pry"
 
 def draw_board(a)
   system "clear"
@@ -30,14 +29,15 @@ def check_if_game_over(soon_to_be_wins)
   end
 end
 
-# draw_board([1, 2, 3, 4, 5, 6, 7, 8, 9])
 loop do
   vars = [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
   draw_board(vars)
-  soon_to_be_wins = {[1, 2, 3] => ['nil', 'nil', 'nil'], [4, 5, 6] => ['nil', 'nil', 'nil'], [7, 8, 9] => ['nil', 'nil', 'nil'], [1, 5, 9] => ['nil', 'nil', 'nil'],
-   [1, 4, 7] => ['nil', 'nil', 'nil'],[2, 5, 8] => ['nil', 'nil', 'nil'], [3, 6, 9] => ['nil', 'nil', 'nil'], [4, 5, 6] => ['nil', 'nil', 'nil']}
+  soon_to_be_wins = {[1, 2, 3] => ['nil', 'nil', 'nil'], [4, 5, 6] => ['nil', 'nil', 'nil'], [7, 8, 9] => ['nil', 'nil', 'nil'], [1, 5, 9] => ['nil', 'nil', 'nil'], [3, 5, 7] => ['nil', 'nil', 'nil'],
+   [1, 4, 7] => ['nil', 'nil', 'nil'],[2, 5, 8] => ['nil', 'nil', 'nil'], [3, 6, 9] => ['nil', 'nil', 'nil']}
   #player chooses and adds to board
   loop do
+    draw_board(vars)
+    break if check_if_game_over(soon_to_be_wins)
     puts "Choose a position from 1 to 9 to place a piece:"
     begin
       player_move = gets.chomp.to_i
@@ -52,7 +52,7 @@ loop do
     break if check_if_game_over(soon_to_be_wins)
     # computer chooses and adds to board
     case
-    when soon_to_be_wins.has_value?(['O', 'nil', 'O']) || soon_to_be_wins.has_value?(['O', 'O', 'nil']) || soon_to_be_wins.has_value?(['nil', 'O', 'O'])   # for two O's
+    when soon_to_be_wins.has_value?(['O', 'nil', 'O']) || soon_to_be_wins.has_value?(['O', 'O', 'nil']) || soon_to_be_wins.has_value?(['nil', 'O', 'O'])   # first checks if comp can win
       soon_to_be_wins.each do |k, v|
         if (v.count('O') == 2) && (v.count('X') == 0)   #if o about to win
           space = k[v.index('nil')]
@@ -65,7 +65,7 @@ loop do
           break
         end
       end
-    when soon_to_be_wins.has_value?(['X', 'nil', 'X']) || soon_to_be_wins.has_value?(['X', 'X', 'nil']) || soon_to_be_wins.has_value?(['nil', 'X', 'X'])  # for two X's
+    when soon_to_be_wins.has_value?(['X', 'nil', 'X']) || soon_to_be_wins.has_value?(['X', 'X', 'nil']) || soon_to_be_wins.has_value?(['nil', 'X', 'X'])  # then checks if player is going to win => tries to block
       soon_to_be_wins.each do |k, v|
         if (v.count('X') == 2) && (v.count('O') == 0)   #if x about to win
           space = k[v.index('nil')]
@@ -78,7 +78,7 @@ loop do
           break
         end
       end
-    when soon_to_be_wins.has_value?(['O', 'nil', 'nil']) || soon_to_be_wins.has_value?(['nil', 'O', 'nil']) || soon_to_be_wins.has_value?(['nil', 'nil', 'O'])   # for one 0 no x
+    when soon_to_be_wins.has_value?(['O', 'nil', 'nil']) || soon_to_be_wins.has_value?(['nil', 'O', 'nil']) || soon_to_be_wins.has_value?(['nil', 'nil', 'O'])   # tries to add to its attempt to win
       soon_to_be_wins.each do |k, v|
         if (v.count('O') == 1) && (v.count('X') == 0)   #if x about to win
           space = k[v.index('nil')]
@@ -91,8 +91,8 @@ loop do
           break
         end
       end 
-    when soon_to_be_wins.has_value?(['nil', 'nil', 'nil'])   # for rows with no elements
-      soon_to_be_wins.each do |k, v|
+    when soon_to_be_wins.has_value?(['nil', 'nil', 'nil'])   # if all attempts are nonexistent, starts another
+      soon_to_be_wins.to_a.shuffle.to_h.each do |k, v|
         if (v.count('O') == 0) && (v.count('X') == 0)   #if x about to win
           space = k[v.index('nil')]
           vars[space - 1] = 'O' # changes the space to 'O' in vars master record
@@ -114,14 +114,10 @@ loop do
               value[key.index(space)] = 'O'
             end
           end
-        else
-          next
+          break
         end
-        break
       end
     end
-    draw_board(vars)
-    break if check_if_game_over(soon_to_be_wins)
   end
 
   puts "Play again? (y/n)"
