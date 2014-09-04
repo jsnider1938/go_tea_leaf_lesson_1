@@ -92,7 +92,7 @@ puts "Welcome to the table. What's your name?"      #
 name = gets.chomp                                   #
 sleep(0.75)                                         #
 money = [100]                                       #
-loop            # this is equal to playing a hand
+loop do        # this is equal to playing a hand
   puts "How many decks do you want in the Continuous Shuffling Machine?"    # asks player how many decks to prevent counting cards
   begin
     num_of_decks = gets.chomp.to_i
