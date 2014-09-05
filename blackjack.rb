@@ -9,15 +9,15 @@ def shuffle_deck(num)   # puts x number of decks into continuous shuffling machi
           'AD' => 11, '2D' => 2, '3D' => 3, '4D' => 4, '5D' => 5, '6D' => 6, '7D' => 7, '8D' => 8, '9D' => 9, '10D' => 10, 'JD' => 10, 'QD' => 10, 'KD' => 10
           }
     shuffling_machine.unshift(full_deck.to_a.shuffle.to_h)
+    binding.pry
   end
   return shuffling_machine # deck.shuffle
 end
 
 def draw_card(hand, shuffling_machine, num_of_decks)    # adds a card to player/computer hand
   which_deck = rand(1..num_of_decks)
-  card = shuffling_machine[which_deck - 1].to_a.sample
+  card = shuffling_machine[which_deck - 1].to_a.pop
   hand.store(card[0], card[1])
-  shuffling_machine[which_deck - 1].delete(card[0])
 end
 
 def hand_value(hand)        # determines players/computers hand value
